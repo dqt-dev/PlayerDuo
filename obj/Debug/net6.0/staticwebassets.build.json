@@ -1,0 +1,19 @@
+{
+  "Version": 1,
+  "Hash": "3WnjYfTvU2FDQfYSVGsRbJ3QCsBzMzSMUqoRIZuDs/M=",
+  "Source": "PlayerDuo",
+  "BasePath": "_content/PlayerDuo",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "PlayerDuo\\wwwroot",
+      "Source": "PlayerDuo",
+      "ContentRoot": "C:\\Users\\ADMIN\\source\\repos\\PlayerDuo\\PlayerDuo\\wwwroot\\",
+      "BasePath": "_content/PlayerDuo",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": []
+}
