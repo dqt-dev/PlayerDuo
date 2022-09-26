@@ -16,13 +16,9 @@ namespace PlayerDuo.Database.Configurations
             builder.Property(x => x.Username).IsRequired().HasMaxLength(30);
             builder.Property(x => x.PasswordHash).IsRequired();
             builder.Property(x => x.PasswordSalt).IsRequired();
-            builder.Property(x => x.FirstName).IsRequired().HasMaxLength(30);
-            builder.Property(x => x.LastName).IsRequired().HasMaxLength(30);
+            builder.Property(x => x.NickName).IsRequired().HasMaxLength(30);
             builder.Property(x => x.Phone).IsRequired().HasMaxLength(15);
             builder.Property(x => x.Email).IsRequired().HasMaxLength(62);
-
-            builder.Property(x => x.ProviderId).IsRequired(false);
-            builder.Property(x => x.HotelId).IsRequired(false);
         }
     }
 }

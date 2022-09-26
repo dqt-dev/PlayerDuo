@@ -55,12 +55,10 @@ namespace PlayerDuo.Repositories.Authen
             return new AuthenVm()
             {
                 Username = user.Username,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
+                NickName = user.NickName,
                 Phone = user.Phone,
                 Email = user.Email,
                 AvatarUrl = !String.IsNullOrEmpty(user.AvatarUrl) ? user.AvatarUrl : String.Empty,
-                ProviderId = user.ProviderId != null ? user.ProviderId : 0,
                 Token = token
             };
         }
@@ -95,12 +93,10 @@ namespace PlayerDuo.Repositories.Authen
             {
                 Id = user.Id,
                 Username = user.Username,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
+                NickName = user.NickName,
                 Phone = user.Phone,
                 Email = user.Email,
                 AvatarUrl = !String.IsNullOrEmpty(user.AvatarUrl) ? user.AvatarUrl : String.Empty,
-                ProviderId = user.ProviderId != null ? user.ProviderId : 0,
                 Token = token
             };
         }
@@ -127,8 +123,7 @@ namespace PlayerDuo.Repositories.Authen
                 PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(request.Password)),
                 PasswordSalt = hmac.Key,
                 Email = request.Email,
-                FirstName = request.FirstName,
-                LastName = request.LastName,
+                NickName = request.NickName,
                 Phone = request.Phone,
                 AvatarUrl = "/storage/blank_avatar.png",
                 IsEnabled = true
@@ -153,8 +148,7 @@ namespace PlayerDuo.Repositories.Authen
             {
                 Id = newUser.Id,
                 Username = newUser.Username,
-                FirstName = newUser.FirstName,
-                LastName = newUser.LastName,
+                NickName = newUser.NickName,
                 Phone = newUser.Phone,
                 Email = newUser.Email,
                 AvatarUrl = "/storage/blank_avatar.png",

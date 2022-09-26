@@ -18,12 +18,24 @@ namespace PlayerDuo.Database
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
             modelBuilder.ApplyConfiguration(new UserRoleConfiguration());
+            modelBuilder.ApplyConfiguration(new CategoryConfiguration());
+            modelBuilder.ApplyConfiguration(new ReportTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new SkillConfiguration());
+            modelBuilder.ApplyConfiguration(new ReportConfiguration());
+            modelBuilder.ApplyConfiguration(new ImageReportConfiguration());
+            modelBuilder.ApplyConfiguration(new OrderConfiguration());
 
         }
 
         public DbSet<User>? Users { get; set; }
         public DbSet<Role>? Roles { get; set; }
         public DbSet<UserRole>? UserRoles { get; set; }
+        public DbSet<Category>? Categories { get; set; }
+        public DbSet<ReportType>? ReportTypes { get; set; }
+        public DbSet<Skill>? Skills { get; set; }
+        public DbSet<Report>? Reports { get; set; }
+        public DbSet<ImageReport>? ImageReports { get; set; }
+        public DbSet<Order>? Orders { get; set; }
 
     }
 }
