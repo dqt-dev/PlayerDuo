@@ -3,7 +3,7 @@ using PlayerDuo.Database;
 using PlayerDuo.Repositories.Authen;
 // using PlayerDuo.Repositories.Hotels;
 // using PlayerDuo.Repositories.Messages;
-// using PlayerDuo.Repositories.Orders;
+using PlayerDuo.Repositories.Orders;
 // using PlayerDuo.Repositories.Places;
 // using PlayerDuo.Repositories.Providers;
 // using PlayerDuo.Repositories.Tours;
@@ -17,6 +17,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using PlayerDuo.Repositories.Messages;
+using PlayerDuo.Repositories.Skills;
+using PlayerDuo.Repositories.Categories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -106,13 +109,13 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 // builder.Services.AddScoped<IEmailService, EmailService>();
 
 builder.Services.AddScoped<IAuthenRepository, AuthenRepository>();
-// builder.Services.AddScoped<IUserRepository, UserRepository>();
-// builder.Services.AddScoped<IPlaceRepository, PlaceRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ISkillRepository, SkillRepository>();
 // builder.Services.AddScoped<ITourRepository, TourRepository>();
 // builder.Services.AddScoped<IProviderRepository, ProviderRepository>();
-// builder.Services.AddScoped<IOrderRepository, OrderRepository>();
-// builder.Services.AddScoped<IMessageRepository, MessageRepository>();
-// builder.Services.AddScoped<IHotelRepository, HotelRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IMessageRepository, MessageRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
 builder.Services.AddHttpClient();
 

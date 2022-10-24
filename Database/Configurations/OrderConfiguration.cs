@@ -12,20 +12,20 @@ namespace PlayerDuo.Database.Configurations
 
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).UseIdentityColumn();
-            builder.Property(x => x.IsAccepted).HasDefaultValue(false);
+            builder.Property(x => x.Status).HasDefaultValue(1); // default is created
             builder.Property(x => x.Quality).IsRequired();
             builder.Property(x => x.Price).IsRequired();
 
 
             // 1-1: order - skill
             builder.HasOne(order => order.Skill)
-                .WithOne(skill => skill.Order)
-                .HasForeignKey<Order>(order => order.SkillId);
+                .WithMany(skill => skill.Orders)
+                .HasForeignKey(order => order.SkillId);
 
             // 1-n: user - orders
             builder.HasOne(order => order.User)
                     .WithMany(user => user.Orders)
-                    .HasForeignKey(order => order.UserOrderId)
+                    .HasForeignKey(order => order.OrderedUserId)
                     .OnDelete(DeleteBehavior.NoAction);
         }
     }

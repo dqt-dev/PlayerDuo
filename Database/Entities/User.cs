@@ -12,7 +12,8 @@
         public string? Email { get; set; }
         public string? AvatarUrl { get; set; }
         public string? AudioUrl { get; set; }
-        public bool IsEnabled { get; set; }
+        public bool IsEnabled { get; set; } // enable or disable user 
+        public bool isPlayer { get; set; } // check user have role Player?
         public bool Status { get; set; }  // set status online/ offline 
 
         // navigation props

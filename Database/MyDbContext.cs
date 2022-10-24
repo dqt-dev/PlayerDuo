@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PlayerDuo.Database.Configurations;
 using PlayerDuo.Database.Entities;
+using PlayerDuo.Database.Extensions;
 
 namespace PlayerDuo.Database
 {
@@ -24,6 +25,10 @@ namespace PlayerDuo.Database
             modelBuilder.ApplyConfiguration(new ReportConfiguration());
             modelBuilder.ApplyConfiguration(new ImageReportConfiguration());
             modelBuilder.ApplyConfiguration(new OrderConfiguration());
+            modelBuilder.ApplyConfiguration(new MessageConfiguration());
+
+            // Data seeding
+            modelBuilder.Seed();
 
         }
 
@@ -36,6 +41,7 @@ namespace PlayerDuo.Database
         public DbSet<Report>? Reports { get; set; }
         public DbSet<ImageReport>? ImageReports { get; set; }
         public DbSet<Order>? Orders { get; set; }
+        public DbSet<Message>? Messages { get; set; }
 
     }
 }

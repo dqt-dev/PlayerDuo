@@ -19,15 +19,15 @@ namespace PlayerDuo.Database.Configurations
                 .WithOne(reportType => reportType.Report)
                 .HasForeignKey<Report>(report => report.ReportTypeId);
 
-            // 1-n: User - Reports
-                builder.HasOne(report => report.User)
-                    .WithMany(user => user.Reports)
-                    .HasForeignKey(report => report.ReportedUserId);
+            // // 1-n: User - Reports
+            //     builder.HasOne(report => report.User)
+            //         .WithMany(user => user.Reports)
+            //         .HasForeignKey(report => report.ReportedUserId);
 
-            // 1-n: User - Reports
-                builder.HasOne(report => report.User)
-                    .WithMany(user => user.Reports)
-                    .HasForeignKey(report => report.CreatedUserId);
+            // // 1-n: User - Reports
+            //     builder.HasOne(report => report.User)
+            //         .WithMany(user => user.Reports)
+            //         .HasForeignKey(report => report.CreatedUserId);
         }
     }
 }
