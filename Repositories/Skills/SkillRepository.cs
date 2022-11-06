@@ -205,10 +205,11 @@ namespace PlayerDuo.Repositories.Skills
                         (from u in _context.Users
                          join s in _context.Skills on u.Id equals s.UserId
                          join c in _context.Categories on s.CategoryId equals c.Id
-                         join o in _context.Orders on s.Id equals o.SkillId
                          select new
                          {
                              UserId = u.Id,
+                             Status = u.Status,
+                             Avatar = u.AvatarUrl,
                              NickName = u.NickName,
                              CategoryName = c.CategoryName,
                              AudioUrl = s.AudioUrl,
@@ -222,10 +223,14 @@ namespace PlayerDuo.Repositories.Skills
             {
                 var result = query.Select(x => new SkillVm()
                 {
+                    UserId = x.UserId,
+                    SkillId = x.SkillId,
                     PlayerName = x.NickName,
+                    AvatarUrl = x.Avatar,
                     CategoryName = x.CategoryName,
                     AudioUrl = x.AudioUrl,
                     Description = x.Description,
+                    Status = x.Status,
                     Price = x.Price,
                     Total = GetTotal(x.SkillId),
                     Rating = GetRating(x.SkillId),
@@ -237,11 +242,15 @@ namespace PlayerDuo.Repositories.Skills
             {
                 var result = query.Where(x => x.UserId == userId && x.IsEnabled == IsEnabled).Select(x => new SkillVm()
                 {
+                    UserId = x.UserId,
+                    SkillId = x.SkillId,
                     PlayerName = x.NickName,
                     CategoryName = x.CategoryName,
+                    AvatarUrl = x.Avatar,
                     AudioUrl = x.AudioUrl,
                     Description = x.Description,
                     Price = x.Price,
+                    Status = x.Status,
                     Total = GetTotal(x.SkillId),
                     Rating = GetRating(x.SkillId),
                     IsEnabled = x.IsEnabled,
@@ -253,9 +262,13 @@ namespace PlayerDuo.Repositories.Skills
             {
                 var result = query.Where(x => x.UserId == userId).Select(x => new SkillVm()
                 {
+                    UserId = x.UserId,
+                    SkillId = x.SkillId,
                     PlayerName = x.NickName,
                     CategoryName = x.CategoryName,
+                    AvatarUrl = x.Avatar,
                     AudioUrl = x.AudioUrl,
+                    Status = x.Status,
                     Description = x.Description,
                     Price = x.Price,
                     Total = GetTotal(x.SkillId),
@@ -269,9 +282,13 @@ namespace PlayerDuo.Repositories.Skills
             {
                 var result = query.Where(x => x.IsEnabled == IsEnabled).Select(x => new SkillVm()
                 {
+                    UserId = x.UserId,
+                    SkillId = x.SkillId,
                     PlayerName = x.NickName,
                     CategoryName = x.CategoryName,
+                    AvatarUrl = x.Avatar,
                     AudioUrl = x.AudioUrl,
+                    Status = x.Status,
                     Description = x.Description,
                     Price = x.Price,
                     Total = GetTotal(x.SkillId),

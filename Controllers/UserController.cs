@@ -40,6 +40,26 @@ namespace PlayerDuo.Controllers
             }
         }
 
+        [HttpGet("{userId}")]
+        public async Task<IActionResult> GetUserById(int userId)
+        {
+            try
+            {
+                var result = await _userRepository.GetUserById(userId);
+                if (result == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(DateTime.Now + "- Server Error: " + ex);
+                return StatusCode(500);
+            }
+        }
+
         [HttpPut("me")]
         [Authorize]
         public async Task<IActionResult> Update([FromForm] UpdateUserRequest request)

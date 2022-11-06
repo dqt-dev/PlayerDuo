@@ -34,6 +34,7 @@ namespace PlayerDuo.Repositories.Users
                                             Id = x.Id,
                                             Username = x.Username,
                                             NickName = x.NickName,
+                                            Description = x.Description,
                                             Phone = x.Phone,
                                             Email = x.Email,
                                             AvatarUrl = !String.IsNullOrEmpty(x.AvatarUrl) ? x.AvatarUrl : String.Empty,

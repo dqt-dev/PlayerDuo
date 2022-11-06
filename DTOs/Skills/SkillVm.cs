@@ -2,7 +2,11 @@ namespace PlayerDuo.DTOs.Skills
 {
     public class SkillVm
     {
+        public int UserId { get; set; }
+        public int SkillId { get; set; }
         public string? PlayerName { get; set; }
+        public bool Status { get; set; }
+        public string? AvatarUrl { get; set; }
         public string? CategoryName { get; set; }
         public string? Description { get; set; }
         public string? AudioUrl { get; set; }
