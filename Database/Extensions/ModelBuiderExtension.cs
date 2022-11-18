@@ -106,19 +106,19 @@ namespace PlayerDuo.Database.Extensions
 
             // data seeding for Categories
             modelBuilder.Entity<Category>().HasData(
-                new Category { Id = 1, CategoryName = "Liên Quân Mobile", ImageUrl = "/storage/AOV.png" },
-                new Category { Id = 2, CategoryName = "Liên Minh Huyền Thoại", ImageUrl = "/storage/LOL.png" },
-                new Category { Id = 3, CategoryName = "PUBG Mobile", ImageUrl = "/storage/PUBG.png" },
-                new Category { Id = 4, CategoryName = "Free Fire", ImageUrl = "/storage/freefire.png" },
-                new Category { Id = 5, CategoryName = "Liên Minh: Tốc Chiến", ImageUrl = "/storage/LOL_Mobile.png" },
-                new Category { Id = 6, CategoryName = "Mobile Legends", ImageUrl = "/storage/MBLG.png" },
-                new Category { Id = 7, CategoryName = "Play Together", ImageUrl = "/storage/playtogether.png" },
-                new Category { Id = 8, CategoryName = "AU Mobile", ImageUrl = "/storage/AOV.png" },
-                new Category { Id = 9, CategoryName = "AU Mobile", ImageUrl = "/storage/AOV.png" },
-                new Category { Id = 10, CategoryName = "Đấu Trường Chân Lý", ImageUrl = "/storage/AOV.png" },
-                new Category { Id = 11, CategoryName = "Valorant", ImageUrl = "/storage/valorant.png" },
-                new Category { Id = 12, CategoryName = "Minecraft", ImageUrl = "/storage/AOV.png" },
-                new Category { Id = 13, CategoryName = "CSGO", ImageUrl = "/storage/AOV.png" }
+                new Category { Id = 1, CategoryName = "Liên Quân Mobile", ImageUrl = "/storage/AOV.png", ImageSmallUrl = "/storage/AOV.png" },
+                new Category { Id = 2, CategoryName = "Liên Minh Huyền Thoại", ImageUrl = "/storage/LOL.png", ImageSmallUrl = "/storage/AOV.png" },
+                new Category { Id = 3, CategoryName = "PUBG Mobile", ImageUrl = "/storage/PUBG.png", ImageSmallUrl = "/storage/AOV.png" },
+                new Category { Id = 4, CategoryName = "Free Fire", ImageUrl = "/storage/freefire.png", ImageSmallUrl = "/storage/AOV.png" },
+                new Category { Id = 5, CategoryName = "Liên Minh: Tốc Chiến", ImageUrl = "/storage/LOL_Mobile.png", ImageSmallUrl = "/storage/AOV.png" },
+                new Category { Id = 6, CategoryName = "Mobile Legends", ImageUrl = "/storage/MBLG.png", ImageSmallUrl = "/storage/AOV.png" },
+                new Category { Id = 7, CategoryName = "Play Together", ImageUrl = "/storage/playtogether.png", ImageSmallUrl = "/storage/AOV.png" },
+                new Category { Id = 8, CategoryName = "AU Mobile", ImageUrl = "/storage/AOV.png", ImageSmallUrl = "/storage/AOV.png" },
+                new Category { Id = 9, CategoryName = "AU Mobile", ImageUrl = "/storage/AOV.png", ImageSmallUrl = "/storage/AOV.png" },
+                new Category { Id = 10, CategoryName = "Đấu Trường Chân Lý", ImageUrl = "/storage/AOV.png", ImageSmallUrl = "/storage/AOV.png" },
+                new Category { Id = 11, CategoryName = "Valorant", ImageUrl = "/storage/valorant.png", ImageSmallUrl = "/storage/AOV.png" },
+                new Category { Id = 12, CategoryName = "Minecraft", ImageUrl = "/storage/AOV.png", ImageSmallUrl = "/storage/AOV.png" },
+                new Category { Id = 13, CategoryName = "CSGO", ImageUrl = "/storage/AOV.png", ImageSmallUrl = "/storage/AOV.png" }
             );
 
             // data seeding for ReportType
@@ -147,7 +147,8 @@ namespace PlayerDuo.Database.Extensions
                     AudioUrl = "/audio/6a8f7469-c581-4f00-be5d-f9383c47c0b1.mp3",
                     Description = "Chiến tướng là chuyện nhỏ",
                     Price = 100,
-                    IsEnabled = true
+                    IsEnabled = true, 
+                    ImageDetailUrl = ""
                 },
                 new Skill
                 {
@@ -157,7 +158,8 @@ namespace PlayerDuo.Database.Extensions
                     AudioUrl = "/audio/6a8f7469-c581-4f00-be5d-f9383c47c0b1.mp3",
                     Description = "Tầu hài là chính",
                     Price = 100,
-                    IsEnabled = false
+                    IsEnabled = false,
+                    ImageDetailUrl = ""
                 },
                 new Skill
                 {
@@ -167,7 +169,8 @@ namespace PlayerDuo.Database.Extensions
                     AudioUrl = "/audio/6a8f7469-c581-4f00-be5d-f9383c47c0b1.mp3",
                     Description = "Cùng nhau leo rank nào.",
                     Price = 100,
-                    IsEnabled = true
+                    IsEnabled = true,
+                    ImageDetailUrl = ""
                 },
                 new Skill
                 {
@@ -177,7 +180,8 @@ namespace PlayerDuo.Database.Extensions
                     AudioUrl = "/audio/6a8f7469-c581-4f00-be5d-f9383c47c0b1.mp3",
                     Description = "Valorant thì nạp mua skin xịn",
                     Price = 100,
-                    IsEnabled = true
+                    IsEnabled = true,
+                    ImageDetailUrl = ""
                 }
             );
 

@@ -15,7 +15,8 @@ namespace PlayerDuo.Repositories.Orders
         Task<ApiResult<OrderVm>> GetOrderById(int orderId, int userId); // thông tin chi tiết 1 đơn hàng
         Task<ApiResult<string>> CreateOrder(int userId, CreateOrderRequest request); // đặt hàng 
         Task<ApiResult<string>>ConfirmOrder(int userId, int orderId); // xác nhận đơn hàng 
-        Task<ApiResult<string>> CancelOrder(int userId, int orderId); 
+        Task<ApiResult<string>> CancelOrder(int userId, int orderId);
+        Task<ApiResult<List<ReviewVM>>> GetReviewBySkillId(int skillId);
 
         // get ordered tourists list by tour id and depature date
         // Task<OrderedTouristCollect> GetOrderedTouristCollection(int userId, int tourId, string departureDateStr);

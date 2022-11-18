@@ -18,7 +18,7 @@ namespace PlayerDuo.Controllers
 
         [HttpPost("me")]
         [Authorize]
-        public async Task<ActionResult> CreateOrder([FromForm] CreateOrderRequest request)
+        public async Task<ActionResult> CreateOrder(CreateOrderRequest request)
         {
             if (request == null)
             {
@@ -89,6 +89,20 @@ namespace PlayerDuo.Controllers
             return Ok(result);
         }
 
+        [HttpGet("review/{skillId}")]
+        public async Task<ActionResult> GetReviewBySkillId(int skillId)
+        {
+
+            var result = await _orderRepository.GetReviewBySkillId(skillId);
+
+            if (result.IsSuccessed == false)
+            {
+                return BadRequest(error: result.Message);
+            }
+
+            return Ok(result);
+        }
+
         [HttpPut("{orderId:int}/confirm")]
         [Authorize(Roles = "Player")]
         public async Task<ActionResult> ConfirmOrder(int orderId)
@@ -104,10 +118,6 @@ namespace PlayerDuo.Controllers
                     // return Forbid();
                     return BadRequest(result.Message);
                 }
-                // if (result == 0)
-                // {
-                //     return BadRequest("Already in this state.");
-                // }
 
                 return Ok(result.Message);
             }

@@ -7,6 +7,9 @@ namespace PlayerDuo.DTOs.Skills
         public string? PlayerName { get; set; }
         public bool Status { get; set; }
         public string? AvatarUrl { get; set; }
+        public string? ImageUrl { get; set; }
+        public string? ImageDetailUrl { get; set; }
+        public string? ImageSmallUrl { get; set; }
         public string? CategoryName { get; set; }
         public string? Description { get; set; }
         public string? AudioUrl { get; set; }
@@ -14,5 +17,6 @@ namespace PlayerDuo.DTOs.Skills
         public double? Rating { get; set; }
         public double Price { get; set; }  // giá cho 1 trận
         public bool IsEnabled { get; set; } 
+        public long? Duration { get; set; }
     }
 }

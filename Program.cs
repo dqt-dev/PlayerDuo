@@ -1,12 +1,6 @@
 using PlayerDuo.Database;
-// using PlayerDuo.Hubs;
 using PlayerDuo.Repositories.Authen;
-// using PlayerDuo.Repositories.Hotels;
-// using PlayerDuo.Repositories.Messages;
 using PlayerDuo.Repositories.Orders;
-// using PlayerDuo.Repositories.Places;
-// using PlayerDuo.Repositories.Providers;
-// using PlayerDuo.Repositories.Tours;
 using PlayerDuo.Repositories.Users;
 // using PlayerDuo.Services.Email;
 using PlayerDuo.Services.Storage;
@@ -20,6 +14,7 @@ using System.Text;
 using PlayerDuo.Repositories.Messages;
 using PlayerDuo.Repositories.Skills;
 using PlayerDuo.Repositories.Categories;
+using PlayerDuo.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -144,6 +139,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// app.MapHub<ChatHub>("/chat");
+app.MapHub<ChatHub>("/chat");
 
 app.Run();

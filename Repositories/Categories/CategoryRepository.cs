@@ -24,7 +24,8 @@ namespace PlayerDuo.Repositories.Categories
             Category category = new Category()
             {
                 CategoryName = request.CategoryName,
-                ImageUrl = request.ImageUrl
+                ImageUrl = request.ImageUrl,
+                ImageSmallUrl = request.ImageSmallUrl
             };
 
             _context.Categories.Add(category);
@@ -39,7 +40,8 @@ namespace PlayerDuo.Repositories.Categories
             List<CategoryVm> result = query.Select(c => new CategoryVm()
             {
                 CategoryName=c.CategoryName,
-                ImageUrl=c.ImageUrl
+                ImageUrl=c.ImageUrl,
+                ImageSmallUrl=c.ImageSmallUrl
             }
             ).ToList();
             return new ApiResult<List<CategoryVm>>(true, ResultObj: result);
@@ -54,6 +56,7 @@ namespace PlayerDuo.Repositories.Categories
 
             category.CategoryName = request.CategoryName;
             category.ImageUrl = request.ImageUrl;
+            category.ImageSmallUrl = request.ImageSmallUrl;
 
             _context.Categories.Update(category);
             await _context.SaveChangesAsync();

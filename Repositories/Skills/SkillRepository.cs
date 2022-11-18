@@ -21,6 +21,25 @@ namespace PlayerDuo.Repositories.Skills
             _context = context;
         }
 
+        public static long GetDSSDuration(string fileName)
+        {
+            FileInfo fi = new FileInfo(fileName);
+            long size = fi.Length;
+
+            long length = (long)(((size * 1.1869) - ((size / 1054) * 210)) / 1054);
+
+            if (length > 1000)
+            {
+                length = (long)(length * (0.61 + ((length / 100) * 0.0005)));
+            }
+            else
+            {
+                length = (long)(length * (0.61 + ((length / 100) * 0.0015)));
+            }
+
+            return length;
+        }
+
         public async Task<ApiResult<string>> CreateSkill(int userId, CreateSkillRequest request)
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId);
@@ -212,11 +231,15 @@ namespace PlayerDuo.Repositories.Skills
                              Avatar = u.AvatarUrl,
                              NickName = u.NickName,
                              CategoryName = c.CategoryName,
+                             ImageUrl = c.ImageUrl,
+                             ImageDetailUrl = s.ImageDetailUrl,
+                             ImageSmallUrl = c.ImageSmallUrl, 
                              AudioUrl = s.AudioUrl,
                              Description = s.Description,
                              SkillId = s.Id,
                              Price = s.Price,
                              IsEnabled = s.IsEnabled,
+                             Duration = GetDSSDuration("../PlayerDuo/wwwroot/audio/audio1.mp3")
                          }).Distinct().ToListAsync();
             // Trường hợp get all không filter theo userId và IsEnable
             if (userId == null && IsEnabled == null)
@@ -228,6 +251,9 @@ namespace PlayerDuo.Repositories.Skills
                     PlayerName = x.NickName,
                     AvatarUrl = x.Avatar,
                     CategoryName = x.CategoryName,
+                    ImageUrl = x.ImageUrl,
+                    ImageDetailUrl = x.ImageDetailUrl,
+                    ImageSmallUrl = x.ImageSmallUrl,
                     AudioUrl = x.AudioUrl,
                     Description = x.Description,
                     Status = x.Status,
@@ -235,6 +261,7 @@ namespace PlayerDuo.Repositories.Skills
                     Total = GetTotal(x.SkillId),
                     Rating = GetRating(x.SkillId),
                     IsEnabled = x.IsEnabled,
+                    Duration = x.Duration
                 }).ToList();
                 return new ApiResult<IList<SkillVm>>(true, ResultObj: result);
             }
@@ -247,6 +274,9 @@ namespace PlayerDuo.Repositories.Skills
                     PlayerName = x.NickName,
                     CategoryName = x.CategoryName,
                     AvatarUrl = x.Avatar,
+                    ImageUrl = x.ImageUrl,
+                    ImageDetailUrl = x.ImageDetailUrl,
+                    ImageSmallUrl = x.ImageSmallUrl,
                     AudioUrl = x.AudioUrl,
                     Description = x.Description,
                     Price = x.Price,
@@ -254,6 +284,7 @@ namespace PlayerDuo.Repositories.Skills
                     Total = GetTotal(x.SkillId),
                     Rating = GetRating(x.SkillId),
                     IsEnabled = x.IsEnabled,
+                    Duration = x.Duration
                 }
                 ).ToList();
                 return new ApiResult<IList<SkillVm>>(true, ResultObj: result);
@@ -267,6 +298,9 @@ namespace PlayerDuo.Repositories.Skills
                     PlayerName = x.NickName,
                     CategoryName = x.CategoryName,
                     AvatarUrl = x.Avatar,
+                    ImageUrl = x.ImageUrl,
+                    ImageDetailUrl = x.ImageDetailUrl,
+                    ImageSmallUrl = x.ImageSmallUrl,
                     AudioUrl = x.AudioUrl,
                     Status = x.Status,
                     Description = x.Description,
@@ -274,6 +308,7 @@ namespace PlayerDuo.Repositories.Skills
                     Total = GetTotal(x.SkillId),
                     Rating = GetRating(x.SkillId),
                     IsEnabled = x.IsEnabled,
+                    Duration = x.Duration
                 }
                 ).ToList();
                 return new ApiResult<IList<SkillVm>>(true, ResultObj: result);
@@ -287,6 +322,9 @@ namespace PlayerDuo.Repositories.Skills
                     PlayerName = x.NickName,
                     CategoryName = x.CategoryName,
                     AvatarUrl = x.Avatar,
+                    ImageUrl = x.ImageUrl,
+                    ImageDetailUrl = x.ImageDetailUrl,
+                    ImageSmallUrl = x.ImageSmallUrl,
                     AudioUrl = x.AudioUrl,
                     Status = x.Status,
                     Description = x.Description,
@@ -294,6 +332,7 @@ namespace PlayerDuo.Repositories.Skills
                     Total = GetTotal(x.SkillId),
                     Rating = GetRating(x.SkillId),
                     IsEnabled = x.IsEnabled,
+                    Duration = x.Duration
                 }
                 ).ToList();
                 return new ApiResult<IList<SkillVm>>(true, ResultObj: result);

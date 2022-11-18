@@ -28,7 +28,7 @@ namespace PlayerDuo.Database
             modelBuilder.ApplyConfiguration(new MessageConfiguration());
 
             // Data seeding
-            modelBuilder.Seed();
+            //modelBuilder.Seed();
 
         }
 

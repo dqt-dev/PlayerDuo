@@ -35,7 +35,8 @@ namespace PlayerDuo.Repositories.Orders
             if (order == null) return new ApiResult<string>(false, Message: "Order is not exist!");
             if (DateTime.Now > ((DateTime)order.CreatedAt).AddMinutes(5))
             {
-
+                order.IsDeleted = true;
+                await _context.SaveChangesAsync();
                 return new ApiResult<string>(false, "Mã xác nhận quá hạn");
             }
             order.Status = 4; // update status of order is canceled
@@ -58,7 +59,11 @@ namespace PlayerDuo.Repositories.Orders
             var order = await _context.Orders.Where(x => x.Id == orderId).FirstOrDefaultAsync();
             if (order == null) return new ApiResult<string>(false, Message: "Order is not exist!");
             if (DateTime.Now > ((DateTime)order.CreatedAt).AddMinutes(5))
-                return new ApiResult<string>(false, "Mã xác nhận quá hạn");
+            {
+                order.IsDeleted = true; 
+                await _context.SaveChangesAsync();
+                return new ApiResult<string>(false, "Đơn hàng đã quá hạn");
+            }   
             order.Status = 2; // update status of order is starting
             await _context.SaveChangesAsync();
 
@@ -79,7 +84,8 @@ namespace PlayerDuo.Repositories.Orders
                 SkillId = request.SkillId,
                 Price = skill.Price,
                 Quality = request.Quality,
-                CreatedAt = DateTime.Now
+                CreatedAt = DateTime.Now,
+                IsDeleted = false,
             };
 
             _context.Orders.Add(order);
@@ -96,7 +102,7 @@ namespace PlayerDuo.Repositories.Orders
                                join o in _context.Orders on u.Id equals o.OrderedUserId
                                join s in _context.Skills on o.SkillId equals s.Id
                                join c in _context.Categories on s.CategoryId equals c.Id
-                               where o.Id == orderId && (o.OrderedUserId == userId || s.UserId == userId)
+                               where o.Id == orderId && (o.OrderedUserId == userId || s.UserId == userId) && o.IsDeleted == false
                                select new OrderVm()
                                {
                                    PlayerName = _context.Users.Where(u => u.Id == s.UserId).Select(u => u.NickName).FirstOrDefault(),
@@ -124,7 +130,7 @@ namespace PlayerDuo.Repositories.Orders
                         join o in _context.Orders on u.Id equals o.OrderedUserId
                         join s in _context.Skills on o.SkillId equals s.Id
                         join c in _context.Categories on s.CategoryId equals c.Id
-                        where u.Id == userId
+                        where u.Id == userId && o.IsDeleted == false
                         select new { u, o, s, c };
             if (query == null) return new ApiResult<List<OrderVm>>(false, Message: "Có lỗi xảy ra!");
 
@@ -143,7 +149,7 @@ namespace PlayerDuo.Repositories.Orders
                         Quality = record.o.Quality,
                         Status = record.o.Status,
                         TotalPrice = record.s.Price * record.o.Quality,
-                        OrderDate = record.o.CreatedAt
+                        OrderDate = record.o.CreatedAt,
                     });
                 }
                 return new ApiResult<List<OrderVm>>(true, ResultObj: orders);
@@ -177,7 +183,7 @@ namespace PlayerDuo.Repositories.Orders
                         join o in _context.Orders on u.Id equals o.OrderedUserId
                         join s in _context.Skills on o.SkillId equals s.Id
                         join c in _context.Categories on s.CategoryId equals c.Id
-                        where s.UserId == userId 
+                        where s.UserId == userId && o.IsDeleted == false
                         select new { u, o, s, c };
             if (query == null) return new ApiResult<List<OrderVm>>(false, Message: "Có lỗi xảy ra!");
 
@@ -189,6 +195,7 @@ namespace PlayerDuo.Repositories.Orders
                 {
                     orders.Add(new OrderVm()
                     {
+                        OrderId = record.o.Id,
                         OrderedUserName = _context.Users.Where(u => u.Id == record.o.OrderedUserId).Select(u => u.NickName).FirstOrDefault(),
                         AvatarUserUrl = _context.Users.Where(u => u.Id == record.o.OrderedUserId).Select(u => u.AvatarUrl).FirstOrDefault(),
                         CategoryName = record.c.CategoryName,
@@ -208,6 +215,7 @@ namespace PlayerDuo.Repositories.Orders
                 {
                     orders.Add(new OrderVm()
                     {
+                        OrderId = record.o.Id,
                         PlayerName = _context.Users.Where(u => u.Id == record.s.UserId).Select(u => u.NickName).FirstOrDefault(),
                         AvatarPlayerUrl = _context.Users.Where(u => u.Id == record.s.UserId).Select(u => u.AvatarUrl).FirstOrDefault(),
                         CategoryName = record.c.CategoryName,
@@ -220,6 +228,32 @@ namespace PlayerDuo.Repositories.Orders
                 }
                 return new ApiResult<List<OrderVm>>(true, ResultObj: orders);
             }
+        }
+
+        public async Task<ApiResult<List<ReviewVM>>> GetReviewBySkillId(int skillId)
+        {
+            // Get list order filter by user id
+            List<ReviewVM> reviews = new List<ReviewVM>();
+            var query = from u in _context.Users
+                        join o in _context.Orders on u.Id equals o.OrderedUserId
+                        join s in _context.Skills on o.SkillId equals s.Id
+                        where s.Id == skillId && o.Rating != null
+                        select new { u, o, s };
+            if (query == null) return new ApiResult<List<ReviewVM>>(false, Message: "Có lỗi xảy ra!");
+            foreach (var item in query)
+            {
+                reviews.Add(new ReviewVM
+                {
+                    ReviewId = item.o.Id,
+                    NickName = item.u.NickName,
+                    AvatarUrl = item.u.AvatarUrl,
+                    Comment = item.o.Comment,
+                    CreatedAt = item.o.CreatedAt,
+                    Rating = item.o.Rating
+                });
+            }
+            return new ApiResult<List<ReviewVM>>(true, ResultObj: reviews);
+
         }
     }
 }

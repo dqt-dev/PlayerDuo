@@ -15,6 +15,7 @@ namespace PlayerDuo.Database.Configurations
 
             builder.Property(x => x.CategoryName).IsRequired();
             builder.Property(x => x.ImageUrl).IsRequired();
+            builder.Property(x => x.ImageSmallUrl).IsRequired();
         }
     }
 }

@@ -17,11 +17,12 @@ namespace PlayerDuo.Database.Configurations
             builder.Property(x => x.Price).IsRequired();
             builder.Property(x => x.IsEnabled).HasDefaultValue(false);
             builder.Property(x => x.AudioUrl).IsRequired();
+            builder.Property(x => x.ImageDetailUrl).IsRequired();
 
 
 
             // 1-n: user - user skills
-                builder.HasOne(skill => skill.User)
+            builder.HasOne(skill => skill.User)
                     .WithMany(user => user.Skills)
                     .HasForeignKey(skill => skill.UserId);
 

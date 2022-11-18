@@ -2,6 +2,7 @@ namespace PlayerDuo.DTOs.Orders
 {
     public class OrderVm
     {
+        public int OrderId { get; set; }
         public string? PlayerName { get; set; }
         public string? OrderedUserName { get; set; }
         public string? AvatarUserUrl { get; set; }

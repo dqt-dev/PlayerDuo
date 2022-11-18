@@ -84,9 +84,44 @@ namespace PlayerDuo.Repositories.Messages
             return newMessage.Id;
         }
 
-        public Task<List<UserChatVm>> GetUserChatList(int userId)
+        public async Task<List<UserChatVm>> GetUserChatList(int userId)
         {
-            throw new NotImplementedException();
+
+            //// get list user id from message table
+            var listIds = (await _context.Messages.Where(x => x.SenderId == userId.ToString() || x.ReceiverId == userId.ToString())
+                                           .AsNoTracking()
+                                           .OrderByDescending(x => x.Id)
+                                           .Select(x =>
+                                                        x.SenderId == userId.ToString()
+                                                        ? x.ReceiverId
+                                                        : x.SenderId)
+                                           .AsSplitQuery()
+                                           .ToListAsync())
+                                           .DistinctBy(result_value => result_value);
+
+            //// get list user
+            var chatUsers = new List<UserChatVm>();
+            foreach (var id in listIds)
+            {
+                DateTime lastestTime = await GetLastestMessageTime(userId.ToString(), id);
+                String lastestMessage = await GetLastestMessage(userId.ToString(), id);
+                if (_context.Users.Any(x => x.Id.ToString() == id))
+                {
+                    chatUsers.Add(await _context.Users.Where(x => x.Id.ToString() == id)
+                                                .AsNoTracking()
+                                                .Select(x => new UserChatVm()
+                                                {
+                                                    Id = x.Id.ToString(),
+                                                    UserId = x.Id,
+                                                    NickName = x.NickName,
+                                                    AvatarUrl = x.AvatarUrl,
+                                                    LastestTime = lastestTime,
+                                                    LastestMessage = lastestMessage
+                                                }).FirstOrDefaultAsync());
+                }
+            }
+
+            return chatUsers;
         }
 
         public async Task<string> UploadImage(IFormFile image)
@@ -121,6 +156,15 @@ namespace PlayerDuo.Repositories.Messages
                 return DateTime.MinValue;
             }
             return time;
+        }
+
+        private async Task<String> GetLastestMessage(string userId, string withUserId)
+        {
+            var message = await _context.Messages.Where(x => (x.SenderId == userId && x.ReceiverId == withUserId) ||
+                                                              (x.SenderId == withUserId && x.ReceiverId == userId))
+                                                  .OrderByDescending(x => x.DateTime)
+                                                  .Select(x => x.Content).FirstOrDefaultAsync();
+            return message;
         }
     }
 }
