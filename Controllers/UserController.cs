@@ -162,5 +162,54 @@ namespace PlayerDuo.Controllers
                 return StatusCode(500);
             }
         }
+
+        [HttpPut("me/payment")]
+        [Authorize]
+        public async Task<IActionResult> Payment(int coin)
+        {
+            try
+            {
+                var claimsPrincipal = this.User;
+                var userId = Int32.Parse(claimsPrincipal.FindFirst("id").Value);
+
+                var result = await _userRepository.Payment(userId, coin);
+                if (result == null)
+                {
+                    return NotFound();
+                }
+
+                var updatedUser = await _userRepository.GetUserById(userId);
+                return Ok(updatedUser);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(DateTime.Now + "- Server Error: " + ex);
+                return StatusCode(500);
+            }
+        }
+
+        [HttpGet("me/tradehistory")]
+        [Authorize]
+        public async Task<IActionResult> GetTradeHistories()
+        {
+            try
+            {
+                var claimsPrincipal = this.User;
+                var userId = Int32.Parse(claimsPrincipal.FindFirst("id").Value);
+
+                var result = await _userRepository.GetTradeHistories(userId);
+                if (result == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(DateTime.Now + "- Server Error: " + ex);
+                return StatusCode(500);
+            }
+        }
     }
 }

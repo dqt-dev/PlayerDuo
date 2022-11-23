@@ -112,6 +112,9 @@ namespace PlayerDuo.Migrations
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<int?>("OrderedUserId")
                         .HasColumnType("int");
 
@@ -263,6 +266,33 @@ namespace PlayerDuo.Migrations
                     b.ToTable("Skills", (string)null);
                 });
 
+            modelBuilder.Entity("PlayerDuo.Database.Entities.TradeHistory", b =>
+                {
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"), 1L, 1);
+
+                    b.Property<int?>("Coin")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TradeHistories");
+                });
+
             modelBuilder.Entity("PlayerDuo.Database.Entities.User", b =>
                 {
                     b.Property<int>("Id")
@@ -276,6 +306,12 @@ namespace PlayerDuo.Migrations
 
                     b.Property<string>("AvatarUrl")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Coin")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -394,6 +430,15 @@ namespace PlayerDuo.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("PlayerDuo.Database.Entities.TradeHistory", b =>
+                {
+                    b.HasOne("PlayerDuo.Database.Entities.User", "User")
+                        .WithMany("TradeHistories")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("PlayerDuo.Database.Entities.UserRole", b =>
                 {
                     b.HasOne("PlayerDuo.Database.Entities.Role", "Role")
@@ -445,6 +490,8 @@ namespace PlayerDuo.Migrations
                     b.Navigation("Reports");
 
                     b.Navigation("Skills");
+
+                    b.Navigation("TradeHistories");
 
                     b.Navigation("UserRoles");
                 });

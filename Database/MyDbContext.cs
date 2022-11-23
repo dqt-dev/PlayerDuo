@@ -42,6 +42,7 @@ namespace PlayerDuo.Database
         public DbSet<ImageReport>? ImageReports { get; set; }
         public DbSet<Order>? Orders { get; set; }
         public DbSet<Message>? Messages { get; set; }
+        public DbSet<TradeHistory>? TradeHistories { get; set; }
 
     }
 }

@@ -156,5 +156,59 @@ namespace PlayerDuo.Controllers
                 return StatusCode(500);
             }
         }
+
+        [HttpPut("{orderId:int}/finish")]
+        [Authorize(Roles = "Player")]
+        public async Task<ActionResult> FinishOrder(int orderId)
+        {
+            try
+            {
+                var claimsPrincipal = this.User;
+                var userId = Int32.Parse(claimsPrincipal.FindFirst("id").Value);
+
+                var result = await _orderRepository.FinishOrder(userId, orderId);
+                if (result.IsSuccessed == false)
+                {
+                    // return Forbid();
+                    return BadRequest(result.Message);
+                }
+                // if (result == 0)
+                // {
+                //     return BadRequest("Already in this state.");
+                // }
+
+                return Ok(result.Message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(DateTime.Now + "- Server Error: " + ex);
+                return StatusCode(500);
+            }
+        }
+
+        [HttpPut("{orderId:int}/rating")]
+        [Authorize(Roles = "Player")]
+        public async Task<ActionResult> RatingOrder(int orderId, RatingOrderRequest request)
+        {
+            try
+            {
+                var claimsPrincipal = this.User;
+                var userId = Int32.Parse(claimsPrincipal.FindFirst("id").Value);
+
+                var result = await _orderRepository.RatingOrder(userId, orderId, request);
+                if (result.IsSuccessed == false)
+                {
+                    // return Forbid();
+                    return BadRequest(result.Message);
+                }
+
+                return Ok(result.Message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(DateTime.Now + "- Server Error: " + ex);
+                return StatusCode(500);
+            }
+        }
     }
 }

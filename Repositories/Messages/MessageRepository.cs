@@ -74,7 +74,6 @@ namespace PlayerDuo.Repositories.Messages
                 SenderId = userId,
                 ReceiverId = message.ReceiverId,
                 Content = message.Content,
-                ImageUrl = !String.IsNullOrEmpty(message.ImageUrl) ? message.ImageUrl : "",
                 DateTime = DateTime.Now
             };
 

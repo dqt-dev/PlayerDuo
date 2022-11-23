@@ -12,5 +12,6 @@
         public int? ProviderId { get; set; }
         public bool? Status { get; set; }
         public bool IsEnabled { get; set; }
+        public int? Coin { get; set; }
     }
 }

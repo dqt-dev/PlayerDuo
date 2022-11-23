@@ -39,7 +39,8 @@ namespace PlayerDuo.Repositories.Users
                                             Email = x.Email,
                                             AvatarUrl = !String.IsNullOrEmpty(x.AvatarUrl) ? x.AvatarUrl : String.Empty,
                                             Status = x.Status,
-                                            IsEnabled = x.IsEnabled
+                                            IsEnabled = x.IsEnabled,
+                                            Coin = x.Coin,
                                         }).FirstOrDefaultAsync();
             return user;
         }
@@ -189,7 +190,8 @@ namespace PlayerDuo.Repositories.Users
                 Phone = x.Phone,
                 Email = x.Email,
                 AvatarUrl = !String.IsNullOrEmpty(x.AvatarUrl) ? x.AvatarUrl : String.Empty,
-                IsEnabled = x.IsEnabled
+                IsEnabled = x.IsEnabled,
+                Coin = x.Coin,
             }).ToListAsync();
 
             return new PagedResult<UserVm>()
@@ -258,5 +260,49 @@ namespace PlayerDuo.Repositories.Users
             return result > 0;
         }
 
+        public async Task<bool?> Payment(int userId, int coin)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId);
+            if (user == null)
+            {
+                return null;
+            }
+            
+
+            // save new avatar 
+            if (coin > 0)
+            {
+                user.Coin = user.Coin + coin;
+            }
+
+            var tradeHistory = new TradeHistory()
+            {
+                UserId = userId,
+                Coin = coin,
+                CreatedAt = DateTime.Now,
+                Type = 1
+            };
+
+            _context.TradeHistories.Add(tradeHistory);
+
+            var result = await _context.SaveChangesAsync();
+
+            return result > 0;
+        }
+
+        public async Task<List<TradeHistory>> GetTradeHistories(int userId)
+        {
+
+            var query = await _context.TradeHistories.ToListAsync();
+            List<TradeHistory> result = query.Select(x => new TradeHistory()
+            {
+               UserId = x.UserId,
+               Coin = x.Coin,
+               Type = x.Type,
+               CreatedAt = x.CreatedAt
+            }
+            ).ToList();
+            return result;
+        }
     }
 }

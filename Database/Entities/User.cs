@@ -15,6 +15,7 @@
         public bool IsEnabled { get; set; } // enable or disable user 
         public bool isPlayer { get; set; } // check user have role Player?
         public bool Status { get; set; }  // set status online/ offline 
+        public int? Coin { get; set; }
 
         // navigation props
         // 1 user - n user roles
@@ -27,5 +28,8 @@
 
         // 1 user - n orders
         public List<Report>? Reports { get; set; }
+
+        // 1 user - n orders
+        public List<TradeHistory>? TradeHistories { get; set; }
     }
 }

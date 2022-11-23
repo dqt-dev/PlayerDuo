@@ -142,6 +142,7 @@ namespace PlayerDuo.Repositories.Orders
                 {
                     orders.Add(new OrderVm()
                     {
+                        OrderId = record.o.Id,
                         PlayerName = _context.Users.Where(u => u.Id == record.s.UserId).Select(u => u.NickName).FirstOrDefault(),
                         AvatarPlayerUrl = _context.Users.Where(u => u.Id == record.s.UserId).Select(u => u.AvatarUrl).FirstOrDefault(),
                         CategoryName = record.c.CategoryName,
@@ -161,6 +162,7 @@ namespace PlayerDuo.Repositories.Orders
                 {
                     orders.Add(new OrderVm()
                     {
+                        OrderId = record.o.Id,
                         PlayerName = _context.Users.Where(u => u.Id == record.s.UserId).Select(u => u.NickName).FirstOrDefault(),
                         AvatarPlayerUrl = _context.Users.Where(u => u.Id == record.s.UserId).Select(u => u.AvatarUrl).FirstOrDefault(),
                         CategoryName = record.c.CategoryName,
@@ -254,6 +256,52 @@ namespace PlayerDuo.Repositories.Orders
             }
             return new ApiResult<List<ReviewVM>>(true, ResultObj: reviews);
 
+        }
+
+        public async Task<ApiResult<string>> RatingOrder(int userId, int orderId, RatingOrderRequest ratingRequest)
+        {
+            if(ratingRequest.Rating == null && (ratingRequest.Rating >= 0 && ratingRequest.Rating <=5))
+            {
+                return new ApiResult<string>(false, Message: "Đã xảy ra lỗi!");
+            }    
+            // check order is match with user order
+            var query = (from u in _context.Users
+                         join s in _context.Skills on u.Id equals s.UserId
+                         join o in _context.Orders on s.Id equals o.SkillId
+                         where (o.OrderedUserId == userId && o.Id == orderId)
+                         select new { }).FirstOrDefault();
+            if (query == null) return new ApiResult<string>(false, Message: "Bạn không có quyền đánh giá đơn hàng này"); // return false if order doesn't match user id
+
+            var order = await _context.Orders.Where(x => x.Id == orderId).FirstOrDefaultAsync();
+            if (order == null) return new ApiResult<string>(false, Message: "Đơn hàng này không tồn tại!");
+            if (order.Status != 3) return new ApiResult<string>(false, Message: "Chỉ có thể đánhg giá khi đơn hàng đã hoàn thành!");
+            order.Rating = ratingRequest.Rating;
+            if (!String.IsNullOrEmpty(ratingRequest.Comment))
+            {
+                order.Comment = ratingRequest.Comment;
+            }
+            order.Status = 5; // đã đánh giá
+            await _context.SaveChangesAsync();
+
+            return new ApiResult<string>(true, Message: "Cảm ơn bạn đã đánh giá!");
+        }
+
+        public async Task<ApiResult<string>> FinishOrder(int userId, int orderId)
+        {
+            // check order is match with user
+            var query = (from u in _context.Users
+                         join s in _context.Skills on u.Id equals s.UserId
+                         join o in _context.Orders on s.Id equals o.SkillId
+                         where (s.UserId == userId && o.Id == orderId)
+                         select new { }).FirstOrDefault();
+            if (query == null) return new ApiResult<string>(false, Message: "Order don't match with UserId!"); // return false if order doesn't match user id
+
+            var order = await _context.Orders.Where(x => x.Id == orderId).FirstOrDefaultAsync();
+            if (order == null) return new ApiResult<string>(false, Message: "Order is not exist!");
+            order.Status = 3; // update status of order is finish
+            await _context.SaveChangesAsync();
+
+            return new ApiResult<string>(true, Message: "Chúc mừng bạn đã hoàn thành đơn hàng thành công!");
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using PlayerDuo.DTOs.Common;
+﻿using PlayerDuo.Database.Entities;
+using PlayerDuo.DTOs.Common;
 using PlayerDuo.DTOs.Users;
 
 namespace PlayerDuo.Repositories.Users
@@ -16,5 +17,8 @@ namespace PlayerDuo.Repositories.Users
         Task<PagedResult<UserVm>> GetUsers(GetUsersManageRequest request);
         Task<int> DisableUser(int userId);
         Task<int> EnableUser(int userId);
+
+        Task<bool?> Payment(int userId, int coin);
+        Task<List<TradeHistory>> GetTradeHistories(int userId);
     }
 }

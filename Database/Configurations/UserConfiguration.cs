@@ -19,6 +19,7 @@ namespace PlayerDuo.Database.Configurations
             builder.Property(x => x.NickName).IsRequired().HasMaxLength(30);
             builder.Property(x => x.Phone).IsRequired().HasMaxLength(15);
             builder.Property(x => x.Email).IsRequired().HasMaxLength(62);
+            builder.Property(x => x.Coin).IsRequired().HasDefaultValue(0);
         }
     }
 }

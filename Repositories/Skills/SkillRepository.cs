@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using PlayerDuo.Database.Entities;
 using System.Linq;
 using PlayerDuo.Utilities;
+using PlayerDuo.Services.Storage;
 
 namespace PlayerDuo.Repositories.Skills
 {
@@ -12,32 +13,15 @@ namespace PlayerDuo.Repositories.Skills
         private readonly MyDbContext _context;
         private readonly string _storageFolder;
         private const string StorageFolderName = "audio";
+        private IStorageService _storageService;
 
-        public SkillRepository(MyDbContext context, IWebHostEnvironment webHostEnvironment)
+        public SkillRepository(MyDbContext context, IWebHostEnvironment webHostEnvironment, IStorageService storageService)
         {
+            _storageService = storageService;
             _storageFolder = Path.Combine(webHostEnvironment.WebRootPath, StorageFolderName);
             // create the folder if it does not exist
             Directory.CreateDirectory(_storageFolder);
             _context = context;
-        }
-
-        public static long GetDSSDuration(string fileName)
-        {
-            FileInfo fi = new FileInfo(fileName);
-            long size = fi.Length;
-
-            long length = (long)(((size * 1.1869) - ((size / 1054) * 210)) / 1054);
-
-            if (length > 1000)
-            {
-                length = (long)(length * (0.61 + ((length / 100) * 0.0005)));
-            }
-            else
-            {
-                length = (long)(length * (0.61 + ((length / 100) * 0.0015)));
-            }
-
-            return length;
         }
 
         public async Task<ApiResult<string>> CreateSkill(int userId, CreateSkillRequest request)
@@ -50,12 +34,24 @@ namespace PlayerDuo.Repositories.Skills
                 return new ApiResult<string> (false, Message: "User not exist!");
             }
 
+            var isExistSkill = await (from u in _context.Users
+                                      join s in _context.Skills on u.Id equals s.UserId
+                                      where s.Id == request.CategoryId
+                                      select new
+                                      {
+                                          s.Id
+                                      }).FirstOrDefaultAsync();
+
+            if(isExistSkill != null) return new ApiResult<string>(true, Message: "Bạn đã đăng ký skill này rồi!");
+
+
             // create new object skill
             var newSkill = new Skill()
             {
                 UserId = userId,
                 CategoryId = request.CategoryId,
                 AudioUrl = request.AudioUrl != null ? await UploadAudio(request.AudioUrl) : null,
+                ImageDetailUrl = await _storageService.SaveImage(request.AudioUrl),
                 Description = request.Description,
                 Price = request.Price
             };
@@ -132,7 +128,7 @@ namespace PlayerDuo.Repositories.Skills
             var average =
                         (from s in _context.Skills
                          join o in _context.Orders on s.Id equals o.SkillId
-                         where o.Status == 3 && s.Id == skillId
+                         where o.Status == 5 && s.Id == skillId
                          group o by s.Id into t
                          select new { avg = t.Average(o => o.Rating) }
                          ).FirstOrDefault();
@@ -239,7 +235,6 @@ namespace PlayerDuo.Repositories.Skills
                              SkillId = s.Id,
                              Price = s.Price,
                              IsEnabled = s.IsEnabled,
-                             Duration = GetDSSDuration("../PlayerDuo/wwwroot/audio/audio1.mp3")
                          }).Distinct().ToListAsync();
             // Trường hợp get all không filter theo userId và IsEnable
             if (userId == null && IsEnabled == null)
@@ -260,8 +255,7 @@ namespace PlayerDuo.Repositories.Skills
                     Price = x.Price,
                     Total = GetTotal(x.SkillId),
                     Rating = GetRating(x.SkillId),
-                    IsEnabled = x.IsEnabled,
-                    Duration = x.Duration
+                    IsEnabled = x.IsEnabled
                 }).ToList();
                 return new ApiResult<IList<SkillVm>>(true, ResultObj: result);
             }
@@ -283,8 +277,7 @@ namespace PlayerDuo.Repositories.Skills
                     Status = x.Status,
                     Total = GetTotal(x.SkillId),
                     Rating = GetRating(x.SkillId),
-                    IsEnabled = x.IsEnabled,
-                    Duration = x.Duration
+                    IsEnabled = x.IsEnabled
                 }
                 ).ToList();
                 return new ApiResult<IList<SkillVm>>(true, ResultObj: result);
@@ -307,8 +300,7 @@ namespace PlayerDuo.Repositories.Skills
                     Price = x.Price,
                     Total = GetTotal(x.SkillId),
                     Rating = GetRating(x.SkillId),
-                    IsEnabled = x.IsEnabled,
-                    Duration = x.Duration
+                    IsEnabled = x.IsEnabled
                 }
                 ).ToList();
                 return new ApiResult<IList<SkillVm>>(true, ResultObj: result);
@@ -331,8 +323,7 @@ namespace PlayerDuo.Repositories.Skills
                     Price = x.Price,
                     Total = GetTotal(x.SkillId),
                     Rating = GetRating(x.SkillId),
-                    IsEnabled = x.IsEnabled,
-                    Duration = x.Duration
+                    IsEnabled = x.IsEnabled
                 }
                 ).ToList();
                 return new ApiResult<IList<SkillVm>>(true, ResultObj: result);
